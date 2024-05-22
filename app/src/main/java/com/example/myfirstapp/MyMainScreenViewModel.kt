@@ -24,6 +24,8 @@ init {
 
 
     fun makeAnagramByButton(newText: String) {
+
+
         viewModelScope.launch {
             makeAnagramGreatAgain(newText).collect { _anagram.emit(it) }
         }
