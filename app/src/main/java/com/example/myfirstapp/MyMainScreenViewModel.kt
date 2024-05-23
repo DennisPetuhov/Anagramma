@@ -10,35 +10,37 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MyMainScreenViewModel : ViewModel() {
-    private val _text = MutableStateFlow(" ")
-    val text: StateFlow<String> get() = _text
-    private val _anagram = MutableStateFlow(" ")
+    private var _incomingText = MutableStateFlow("")
+    val incomingText: StateFlow<String> get() = _incomingText
+    private var _filter = MutableStateFlow("")
+    val filter: StateFlow<String> get() = _filter
+    private var _anagram = MutableStateFlow("")
     val anagram: StateFlow<String> get() = _anagram
-    fun onValueChange(newText: String) {
-        _text.value = newText
+
+
+    init {
+        makeAnagramAuto()
     }
-init {
-    makeAnagramAuto()
-}
 
+    fun onValueChangedTextInput(newText: String) {
+        _incomingText.value = newText
+    }
 
+    fun onValueChangedFilterInput(newText: String) {
+        _filter.value = newText
+    }
 
-    fun makeAnagramByButton(newText: String) {
+//    fun makeAnagramByButton(newText: String) {
+//        viewModelScope.launch {
+//            makeAnagramGreatAgain(newText, _filter.value).collect { _anagram.emit(it) }
+//        }
+//    }
 
-
+     fun makeAnagramAuto() {
         viewModelScope.launch {
-            makeAnagramGreatAgain(newText).collect { _anagram.emit(it) }
+            _incomingText.flatMapLatest { text ->
+                _filter.flatMapLatest { filter -> makeAnagramGreatAgain(text, filter) }
+            }.collect { _anagram.emit(it) }
         }
     }
-
-    private fun makeAnagramAuto() {
-        viewModelScope.launch {
-            _text.flatMapLatest {
-                makeAnagramGreatAgain(it)
-            }.collect {
-                _anagram.emit(it)
-            }
-        }
-    }
-
 }
