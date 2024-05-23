@@ -1,9 +1,7 @@
 package com.example.myfirstapp
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import org.junit.After
 import org.junit.Before
@@ -13,11 +11,9 @@ import org.junit.Test
 class MyMainScreenKtTest {
 
 
-
-
-        @get:Rule
-        val composeTestRule = createComposeRule()
-        lateinit var mockViewModel: MyMainScreenViewModel
+    @get:Rule
+    val composeTestRule = createComposeRule()
+    lateinit var mockViewModel: MyMainScreenViewModel
 
 //            @Before
 //            fun setUp() {
@@ -36,30 +32,31 @@ class MyMainScreenKtTest {
 //                composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
 //            }
 
-        @Before
-        fun setUp() {
-            mockViewModel = MyMainScreenViewModel()
+    @Before
+    fun setUp() {
+        mockViewModel = MyMainScreenViewModel()
+    }
+
+    @After
+    fun tearDown() {
+    }
+
+    @Test
+    fun myMainScreen() {
+    }
+
+
+    @Test
+    fun myMainScreen_displaysCorrectText1() {
+        mockViewModel.onValueChangedTextInput("test text")
+
+        composeTestRule.setContent {
+            MyMainScreen(mockViewModel)
         }
+        composeTestRule.onNodeWithText("test text").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Test Filter").assertIsDisplayed()
+    }
 
-        @After
-        fun tearDown() {
-        }
-
-        @Test
-        fun myMainScreen() {
-        }
-
-
-        @Test
-        fun myMainScreen_displaysCorrectText1() {
-            mockViewModel.onValueChangedTextInput( "test text")
-
-            composeTestRule.setContent {
-                MyMainScreen(mockViewModel)
-            }
-            composeTestRule.onNodeWithText("test text").assertIsDisplayed()
-            composeTestRule.onNodeWithText("Test Filter").assertIsDisplayed()
-        }
     @Test
     fun myMainScreen_displaysCorrectText2() {
         mockViewModel.onValueChangedFilterInput("Test Filter")
@@ -69,9 +66,10 @@ class MyMainScreenKtTest {
         }
         composeTestRule.onNodeWithText("Test Filter").assertIsDisplayed()
     }
+
     @Test
     fun myMainScreen_displaysCorrectText() {
-        mockViewModel.onValueChangedTextInput( "test text")
+        mockViewModel.onValueChangedTextInput("test text")
         mockViewModel.onValueChangedFilterInput("Test Filter")
 //            mockViewModel.makeAnagramAuto()
 
